@@ -40,7 +40,7 @@ export default function AdminSidebar() {
         <div className="mb-6 px-2 flex justify-between items-center">
           <div>
             {" "}
-            <h2 className="text-lg font-semibold">Bảng điều khiển</h2>
+            <h2 className="text-lg font-semibold">Bảng điều khiển </h2>
             <p className="text-xs text-black/60 dark:text-white/60">
               Quản trị hệ thống
             </p>
