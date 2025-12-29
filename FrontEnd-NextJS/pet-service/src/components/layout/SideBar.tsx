@@ -92,7 +92,7 @@ export default function Sidebar() {
             className="flex pl-8 py-5 transition-transform hover:translate-x-2 items-center dark:hover:bg-primary-dark hover:bg-primary-light rounded-3xl"
           >
             <MdHomeRepairService className="w-5 h-5 mr-3" />
-            <span>Dịch vụ</span>
+            <span>Dịch Vụ</span>
           </Link>
           <Link
             href="/appointments"
