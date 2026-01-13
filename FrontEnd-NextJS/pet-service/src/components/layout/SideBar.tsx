@@ -116,7 +116,7 @@ export default function Sidebar() {
               className="mb-3 mt-1 p-5 flex transition-transform hover:translate-x-2 items-center text-red-600 hover:animate-pulse dark:hover:bg-primary-dark hover:bg-primary-light rounded-3xl"
             >
               <FaSignOutAlt className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform " />
-              <span>Đăng xuất</span>
+              <span>Đăng xuất </span>
             </div>
           )}
         </div>
