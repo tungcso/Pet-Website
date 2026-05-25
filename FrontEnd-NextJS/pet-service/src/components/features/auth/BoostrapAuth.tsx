@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { getAT, setAT } from "@/lib/authToken";
-import { api } from "@/utils/axiosInstance";
+import { BASE_URL, api } from "@/utils/axiosInstance";
 import { toast } from "sonner";
 import { useAppDispatch } from "@/hooks/redux-hooks";
 import { IUser, setAuth, clearAuth } from "@/lib/authSlice";
@@ -16,7 +16,7 @@ export default function BootstrapAuth() {
 
     (async () => {
       try {
-        const res = (await api.post("/api/auth/refresh")).data;
+        const res = (await api.post(`${BASE_URL}/api/auth/refresh`)).data;
         const data = res.data;
 
         setAT(data.access_token);

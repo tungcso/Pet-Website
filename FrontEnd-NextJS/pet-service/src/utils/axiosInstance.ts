@@ -28,11 +28,11 @@ api.interceptors.response.use(
       refreshing ??= (async () => {
         try {
           const { data: resData } = await axios.post(
-            `/api/auth/refresh`,
+            `${BASE_URL}/api/auth/refresh`,
             null,
             {
               withCredentials: true,
-            }
+            },
           );
 
           const accessToken = resData.data.access_token;
@@ -56,5 +56,5 @@ api.interceptors.response.use(
       toast.error("Phiên đăng nhập đã hết hạn");
     }
     return Promise.reject(err);
-  }
+  },
 );
