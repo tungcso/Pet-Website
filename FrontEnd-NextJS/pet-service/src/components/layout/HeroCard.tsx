@@ -32,7 +32,7 @@ export default function HeroCard() {
         className="z-20"
       >
         <Image
-          src="/images/icons/CSO.png?v=20260525"
+          src="/images/icons/CSO.png"
           alt="CSO dog"
           width={900}
           height={900}
