@@ -54,6 +54,15 @@ export default function Appointments({ service }: { service: string | null }) {
   >();
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [notes, setNotes] = useState<string>("");
+  const [petType, setPetType] = useState<PetType | null>(null);
+
+  const petLabel = (p?: PetType | string | null) => {
+    if (!p) return "-";
+    if (p === PetType.DOG) return "Chó";
+    if (p === PetType.CAT) return "Mèo";
+    if (p === PetType.OTHER) return "Khác";
+    return String(p);
+  };
 
   const toMinutes = (hhmm: string) => {
     const [hh, mm] = hhmm.split(":").map(Number);
@@ -198,6 +207,7 @@ export default function Appointments({ service }: { service: string | null }) {
     const payload = {
       service,
       petWeight: value.petWeight,
+      pet: petType ?? data?.pet,
       phone: value.phone,
       date,
       duration,
@@ -206,6 +216,13 @@ export default function Appointments({ service }: { service: string | null }) {
       price: briefPrice,
       note: notes,
     };
+
+    // ensure date is present and valid before sending
+    if (!date) {
+      toast.error("Vui lòng chọn ngày trước khi xác nhận");
+      setLoading(false);
+      return;
+    }
 
     const _id = await postAppointments(payload);
     if (_id) {
@@ -233,6 +250,7 @@ export default function Appointments({ service }: { service: string | null }) {
     ) {
       toast.error("Chưa có giá cho dịch vụ này");
     }
+    if (data?.pet) setPetType(data.pet);
   }, [service, isLoadingService, data?.rules?.length]);
   if (isError) {
     handleError(error);
@@ -381,11 +399,41 @@ export default function Appointments({ service }: { service: string | null }) {
                       <Weight className="w-4 h-4" />
                       Thông tin thú cưng
                     </h3>
-                    <p>
-                      Thú cưng: {data.pet === PetType.CAT && "Mèo"}
-                      {data.pet === PetType.DOG && "Chó"}
-                      {data.pet === PetType.OTHER && "Khác"}
-                    </p>
+                    <div className="flex items-center gap-3">
+                      <label className="inline-flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="petType"
+                          value={PetType.DOG}
+                          checked={petType === PetType.DOG}
+                          onChange={() => setPetType(PetType.DOG)}
+                          className="w-4 h-4"
+                        />
+                        <span>Chó</span>
+                      </label>
+                      <label className="inline-flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="petType"
+                          value={PetType.CAT}
+                          checked={petType === PetType.CAT}
+                          onChange={() => setPetType(PetType.CAT)}
+                          className="w-4 h-4"
+                        />
+                        <span>Mèo</span>
+                      </label>
+                      <label className="inline-flex items-center gap-2">
+                        <input
+                          type="radio"
+                          name="petType"
+                          value={PetType.OTHER}
+                          checked={petType === PetType.OTHER}
+                          onChange={() => setPetType(PetType.OTHER)}
+                          className="w-4 h-4"
+                        />
+                        <span>Khác</span>
+                      </label>
+                    </div>
                   </div>
                 )}
               </div>
@@ -572,7 +620,8 @@ export default function Appointments({ service }: { service: string | null }) {
                     <span className="font-medium">Dịch vụ:</span> {data?.name}
                   </p>
                   <p>
-                    <span className="font-medium">Pet:</span> {data?.pet ?? "-"}
+                    <span className="font-medium">Pet:</span>{" "}
+                    {petLabel(petType ?? data?.pet)}
                   </p>
                   <p>
                     <span className="font-medium">Ngày:</span>{" "}
@@ -614,7 +663,7 @@ export default function Appointments({ service }: { service: string | null }) {
               "\nSdt: " +
               value.phone +
               " Thú cưng:" +
-              data?.pet
+              petLabel(petType ?? data?.pet)
             }
           />
         )}

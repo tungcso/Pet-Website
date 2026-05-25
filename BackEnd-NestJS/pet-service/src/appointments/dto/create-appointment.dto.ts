@@ -73,6 +73,10 @@ export class CreateAppointmentDto {
   @MaxLength(200, { message: 'note tối đa 200 ký tự.' })
   note?: string;
 
+  @IsNotEmpty({ message: 'pet là bắt buộc.' })
+  @IsEnum(PetType, { message: 'pet phải là DOG | CAT | OTHER' })
+  pet!: PetType;
+
   @IsOptional()
   @IsEnum(['PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELED'], {
     message: 'status must be either PENDING | COMFIRMED | COMPLETED | CANCELED',

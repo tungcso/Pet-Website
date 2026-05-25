@@ -30,6 +30,8 @@ export class Appointment extends Document {
   duration: number; // in minutes
   @Prop()
   endTime: String;
+  @Prop({ type: String, enum: Object.values(PetType) })
+  pet: PetType;
   @Prop({ type: mongoose.Schema.Types.Mixed })
   price: number | string;
 
