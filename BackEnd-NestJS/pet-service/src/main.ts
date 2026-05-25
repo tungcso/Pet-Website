@@ -23,11 +23,16 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.use(cookieParser());
 
-  //config cors
-  app.enableCors({
-    origin: [configService.getOrThrow<string>('FE_BASE_URL')],
+  // config cors: allow multiple origins from FE_BASE_URL (comma-separated)
+  const feBase = configService.get<string>('FE_BASE_URL') ?? '';
+  const allowedOrigins = feBase
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
 
-    methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
+  app.enableCors({
+    origin: allowedOrigins.length ? allowedOrigins : true,
+    methods: 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS',
     preflightContinue: false,
     credentials: true,
   });
