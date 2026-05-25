@@ -10,17 +10,25 @@ import { OAuth2Client } from 'google-auth-library';
 @Injectable()
 export class GoogleAuthService {
   private client: OAuth2Client;
+  private audienceIds: string[];
 
   constructor(private configService: ConfigService) {
-    const googleClientId = this.configService.get<string>('GOOGLE_CLIENT_ID');
-    this.client = new OAuth2Client(googleClientId);
+    const googleClientIds = this.configService
+      .get<string>('GOOGLE_CLIENT_ID')
+      ?.split(',')
+      .map((id) => id.trim())
+      .filter(Boolean);
+
+    this.audienceIds =
+      googleClientIds && googleClientIds.length ? googleClientIds : [];
+    this.client = new OAuth2Client(this.audienceIds[0]);
   }
 
   async verifyToken(token: string) {
     try {
       const ticket = await this.client.verifyIdToken({
         idToken: token,
-        audience: this.configService.get<string>('GOOGLE_CLIENT_ID'),
+        audience: this.audienceIds,
       });
 
       const payload = ticket.getPayload();
