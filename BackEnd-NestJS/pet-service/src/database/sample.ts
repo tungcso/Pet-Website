@@ -4,6 +4,13 @@ export const USER_ROLE = 'user';
 export const MANAGER_ROLE = 'manager';
 export const BANNED_ROLE = 'banned';
 
+export const SERVICE_IDS = {
+  BATH: new Types.ObjectId('665a00000000000000000001'),
+  GROOMING: new Types.ObjectId('665a00000000000000000002'),
+  HOTEL: new Types.ObjectId('665a00000000000000000003'),
+  OTHER: new Types.ObjectId('665a00000000000000000004'),
+} as const;
+
 /** 1) PERMISSIONS */
 export const INIT_PERMISSIONS = [
   // USERS
@@ -228,5 +235,159 @@ export const INIT_ROLES = [
       // Nếu bạn muốn cho quyền “xem danh sách vai trò/quyền” thì có thể thêm:
       // idOf("services:post") ... (nhưng thường KHÔNG)
     ],
+  },
+] as const;
+
+export const INIT_SERVICES = [
+  {
+    _id: SERVICE_IDS.BATH,
+    name: 'Tắm & vệ sinh cho chó mèo',
+    duration: 60,
+    picture: '/images/ui/Dog_cat_shower.png',
+    variant: 'STANDARD',
+    public_id: 'pet-service/bath-basic',
+    type: 'BATH',
+    pet: 'DOG',
+    priceStart: 150000,
+    priceEnd: 350000,
+    description: [
+      'Tắm bằng sản phẩm dịu nhẹ theo loại da',
+      'Sấy tạo form lông gọn gàng',
+      'Vệ sinh tai, móng và vùng nhạy cảm',
+    ],
+  },
+  {
+    _id: SERVICE_IDS.GROOMING,
+    name: 'Cắt tỉa & chăm sóc lông',
+    duration: 90,
+    picture: '/images/ui/massage.png',
+    variant: 'PRO',
+    public_id: 'pet-service/grooming-care',
+    type: 'GROOMING',
+    pet: 'DOG',
+    priceStart: 180000,
+    priceEnd: 420000,
+    description: [
+      'Tỉa mặt, chân, bụng theo tỉ lệ phù hợp',
+      'Gỡ rối và xử lý lông vón cục',
+      'Tư vấn lịch chăm sóc định kỳ',
+    ],
+  },
+  {
+    _id: SERVICE_IDS.HOTEL,
+    name: 'Khách sạn thú cưng',
+    duration: 1440,
+    picture: '/images/ui/meo_tam.png',
+    variant: 'PROMAX',
+    public_id: 'pet-service/hotel-daycare',
+    type: 'HOTEL',
+    pet: 'DOG',
+    priceStart: 250000,
+    priceEnd: 650000,
+    description: [
+      'Khu ở sạch, thoáng và tách khu phù hợp',
+      'Cập nhật ăn uống, vận động mỗi ngày',
+      'Hỗ trợ chăm sóc theo thói quen của bé',
+    ],
+  },
+  {
+    _id: SERVICE_IDS.OTHER,
+    name: 'Dịch vụ bổ sung',
+    duration: 45,
+    picture: '/images/ui/Tiem_phong.png',
+    variant: 'STANDARD',
+    public_id: 'pet-service/other-care',
+    type: 'OTHER',
+    pet: 'CAT',
+    priceStart: 80000,
+    priceEnd: 180000,
+    description: [
+      'Khử mùi, dưỡng da lông chuyên biệt',
+      'Xử lý ve rận và phòng ngừa tái phát',
+      'Combo chăm sóc tiết kiệm theo tháng',
+    ],
+  },
+] as const;
+
+export const INIT_PRICE_RULES = [
+  {
+    name: 'Tắm & vệ sinh - chó nhỏ',
+    service: SERVICE_IDS.BATH,
+    minWeight: 0,
+    maxWeight: 5,
+    price: 150000,
+    isActive: true,
+  },
+  {
+    name: 'Tắm & vệ sinh - chó vừa',
+    service: SERVICE_IDS.BATH,
+    minWeight: 5,
+    maxWeight: 15,
+    price: 220000,
+    isActive: true,
+  },
+  {
+    name: 'Tắm & vệ sinh - chó lớn',
+    service: SERVICE_IDS.BATH,
+    minWeight: 15,
+    maxWeight: 100,
+    price: 320000,
+    isActive: true,
+  },
+  {
+    name: 'Cắt tỉa - chó mèo nhỏ',
+    service: SERVICE_IDS.GROOMING,
+    minWeight: 0,
+    maxWeight: 5,
+    price: 180000,
+    isActive: true,
+  },
+  {
+    name: 'Cắt tỉa - chó mèo vừa',
+    service: SERVICE_IDS.GROOMING,
+    minWeight: 5,
+    maxWeight: 15,
+    price: 280000,
+    isActive: true,
+  },
+  {
+    name: 'Cắt tỉa - chó mèo lớn',
+    service: SERVICE_IDS.GROOMING,
+    minWeight: 15,
+    maxWeight: 100,
+    price: 420000,
+    isActive: true,
+  },
+  {
+    name: 'Khách sạn - bé nhỏ',
+    service: SERVICE_IDS.HOTEL,
+    minWeight: 0,
+    maxWeight: 5,
+    price: 250000,
+    isActive: true,
+  },
+  {
+    name: 'Khách sạn - bé vừa',
+    service: SERVICE_IDS.HOTEL,
+    minWeight: 5,
+    maxWeight: 15,
+    price: 400000,
+    isActive: true,
+  },
+  {
+    name: 'Khách sạn - bé lớn',
+    service: SERVICE_IDS.HOTEL,
+    minWeight: 15,
+    maxWeight: 100,
+    price: 650000,
+    isActive: true,
+  },
+  {
+    name: 'Dịch vụ bổ sung',
+    service: SERVICE_IDS.OTHER,
+    minWeight: 0,
+    maxWeight: 100,
+    price: 120000,
+    isActive: true,
   },
 ] as const;

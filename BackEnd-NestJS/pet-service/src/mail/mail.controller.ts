@@ -25,8 +25,8 @@ export class MailController {
   // test() {
   //   return this.mailService.toVerify({
   //     url: 'http://localhost:3000/auth/verify#eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYWdpYyB0b2tlbiIsImlzcyI6InNlcnZlciIsIl9pZCI6IjY4YTA0YjM1MzdjNDBiZTkxYTQ4ODEyYyIsImlhdCI6MTc1NTMzNTQ3NywiZXhwIjoxNzU1MzM1Nzc3fQ.1TDJxLgEVA-scxPNCSClyR5Jsfu2ObWRje-kc9QVSQE',
-  //     name: 'duong',
-  //     email: 'duongnguyenhust05@gmail.com',
+  //     name: 'Lương Thanh Tùng',
+  //     email: 'luongtungnguyenhust05@gmail.com',
   //   });
   // }
 

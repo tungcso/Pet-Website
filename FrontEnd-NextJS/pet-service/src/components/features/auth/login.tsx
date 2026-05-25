@@ -19,6 +19,8 @@ export default function Login({ onSuccess, setErr }: IProp) {
           useOneTap={true} // bạn có thể bật nếu muốn
           cancel_on_tap_outside
           nonce={"false"}
+          use_fedcm_for_prompt={true}
+          use_fedcm_for_button={true}
         />
       </div>
     </>

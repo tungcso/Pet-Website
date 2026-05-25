@@ -50,6 +50,7 @@ export default function LoginPage() {
     } catch (e: any) {
       console.error(e);
       setErr(e?.message || "Đăng nhập thất bại, thử lại sau.");
+    } finally {
       setLoading(false);
     }
   };
@@ -57,24 +58,35 @@ export default function LoginPage() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
-
-    const res = await localLogin(email, password);
-    if (res) {
-      dispatch(setAuth(res.data.user));
-      router.push(next);
-    } else {
+    try {
+      const res = await localLogin(email, password);
+      if (res) {
+        dispatch(setAuth(res.data.user));
+        router.push(next);
+      }
+    } catch (e) {
+      // localLogin already handles errors and shows toast; just ensure loading resets
+      console.error(e);
+    } finally {
       setLoading(false);
     }
   };
 
-  if (loading || authenticated === "checking") {
+  if (loading) {
     return (
       <div className="min-h-[100vh] flex justify-center items-center">
         <LoadingScreen />{" "}
       </div>
     );
   }
-  if (authenticated === "unauthenticated") {
+
+  if (authenticated === "authenticated") {
+    router.replace("/");
+    return null;
+  }
+
+  // for both 'unauthenticated' and 'checking' (bootstrap not finished), render the login form
+  if (authenticated === "unauthenticated" || authenticated === "checking") {
     return (
       <main>
         <div className="min-h-[100dvh] flex items-center flex-col pt-10 px-4 ">
@@ -87,8 +99,8 @@ export default function LoginPage() {
             onClick={() => router.replace("/")}
           >
             <Image
-              src="/images/icons/ZOZO-cat.png"
-              alt="ZOZO"
+              src="/images/icons/CSO.png"
+              alt="CSO"
               width={296}
               height={296}
               className="mb-3 animate-pulse"

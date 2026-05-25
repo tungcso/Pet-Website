@@ -19,14 +19,10 @@ export class CloudService {
 
   sign(folder: string, publicId?: string) {
     const timestamp = Math.floor(Date.now() / 1000);
-    const upload_preset = this.configService.getOrThrow(
-      'CLOUDINARY_UPLOAD_PRESET',
-    );
 
     const toSign: Record<string, any> = {
       timestamp,
       folder,
-      upload_preset,
     };
     if (publicId) toSign.public_id = publicId;
     const tosign = Object.keys(toSign)
@@ -45,7 +41,6 @@ export class CloudService {
       signature,
       cloudName: this.configService.getOrThrow('CLOUDINARY_CLOUD_NAME'),
       apiKey: this.configService.getOrThrow('CLOUDINARY_API_KEY'),
-      uploadPreset: this.configService.getOrThrow('CLOUDINARY_UPLOAD_PRESET'),
     };
   }
 }

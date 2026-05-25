@@ -9,17 +9,17 @@ export default function Footer() {
         <div>
           <div className="flex items-center gap-2">
             <Image
-              src="/images/icons/ZOZO-cat.png"
-              alt="ZOZO logo"
+              src="/images/icons/CSO.png"
+              alt="CSO logo"
               width={50}
               height={50}
               className="rounded-full"
             />
-            <h2 className="text-xl font-display">ZOZO Pets Service</h2>
+            <h2 className="text-xl font-display">CSO Pets Service</h2>
           </div>
           <p className="mt-4 text-sm leading-relaxed ">
             Nền tảng đặt lịch dịch vụ chăm sóc thú cưng nhanh chóng và tiện lợi.
-            Boss đẹp – Sen vui, đến ZOZO thôi!
+            Boss đẹp – Sen vui, đến CSO thôi!
           </p>
         </div>
 
@@ -38,10 +38,7 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link
-                href="/appointmentsappointments"
-                className="hover:underline"
-              >
+              <Link href="/appointments" className="hover:underline">
                 Đặt lịch
               </Link>
             </li>
@@ -59,9 +56,9 @@ export default function Footer() {
         <div>
           <h3 className="text-lg font-semibold mb-4">Liên hệ</h3>
           <ul className="space-y-2 text-sm">
-            <li>📍 996 Đường Láng, Đống Đa, Hà Nội</li>
-            <li>📞 0886.535.580</li>
-            <li>✉️ vutrunghieu121@gmail.com</li>
+            <li>📍 198 Thái Thịnh, Hà Nội</li>
+            <li>📞 0948881992</li>
+            <li>✉️ luongtung882005@gmail.com</li>
           </ul>
         </div>
         <div>
@@ -80,7 +77,7 @@ export default function Footer() {
 
       {/* Copyright */}
       <div className="border-t border-primary-dark/20 dark:border-primary-light/20 py-4 text-center text-sm">
-        © {new Date().getFullYear()} ZOZO Pets Service. All rights reserved.
+        © {new Date().getFullYear()} CSO Pets Service. All rights reserved.
       </div>
     </footer>
   );

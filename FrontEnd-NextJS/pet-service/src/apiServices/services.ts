@@ -22,12 +22,12 @@ export const getUser = async (): Promise<IUser> => {
 };
 
 export const handleGoogleLogin = async (
-  id_token: string
+  id_token: string,
 ): Promise<ApiResponse<IToken>> => {
   const login = await axios.post(
     `${BASE_URL}/api/auth/login/google`,
     { id_token },
-    { withCredentials: true }
+    { withCredentials: true },
   );
 
   return login.data;
@@ -43,16 +43,14 @@ export function isResOk(statusCode: number) {
 export const delay = (ms: number) =>
   new Promise<void>((resolve) => setTimeout(resolve, ms));
 export const handleError = (error: any) => {
-  try {
-    const msg = Array.isArray(error.response?.data.message)
-      ? error.response.data.message.join(", ")
-      : error.response.data.message || "Đã có lỗi xảy ra, thử lại sau.";
-    toast.error(msg);
-    console.error("API Error:", msg);
-  } catch (error) {
-    toast.error("Đã có lỗi xảy ra, thử lại sau.");
-    console.error("API Error:", error);
-  }
+  const fallback = "Đã có lỗi xảy ra, thử lại sau.";
+  const rawMessage = error?.response?.data?.message ?? error?.message;
+  const msg = Array.isArray(rawMessage)
+    ? rawMessage.join(", ")
+    : rawMessage || fallback;
+
+  toast.error(msg);
+  console.error("API Error:", error ?? msg);
 };
 
 export function scrollWindowToTop(behavior: ScrollBehavior = "smooth") {

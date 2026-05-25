@@ -65,8 +65,8 @@ export class MailService {
 
     return await this.mailerService.sendMail({
       to: email,
-      from: '"ZoZo" support@example.com', // override default from
-      subject: 'Dịch vụ ZoZo',
+      from: '"CSO" support@example.com', // override default from
+      subject: 'Dịch vụ CSO',
       template: 'appointment_template',
       context: {
         customerName: name,
@@ -107,7 +107,7 @@ export class MailService {
 
     return await this.mailerService.sendMail({
       bcc: staffsEmail,
-      from: '"Zozo" support@example.com', // override default from
+      from: '"CSO" support@example.com', // override default from
       subject: 'Đơn hàng đang chờ',
       template: 'staff_order_notification_template',
       context: {
@@ -212,8 +212,8 @@ export class MailService {
 
     return await this.mailerService.sendMail({
       to: email,
-      from: '"ZoZo" support@example.com', // override default from
-      subject: 'Dịch vụ ZoZo',
+      from: '"CSO" support@example.com', // override default from
+      subject: 'Dịch vụ CSO',
       template: 'magic_link_template',
       context: {
         userName,
@@ -234,8 +234,8 @@ export class MailService {
 
     return await this.mailerService.sendMail({
       to: email,
-      from: '"ZoZo" support@example.com', // override default from
-      subject: 'Dịch vụ ZoZo',
+      from: '"CSO" support@example.com', // override default from
+      subject: 'Dịch vụ CSO',
       template: 'forget_password',
       context: {
         userName,

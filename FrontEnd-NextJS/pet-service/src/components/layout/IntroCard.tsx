@@ -27,7 +27,7 @@ export default function IntroCard() {
             >
               Boss đẹp – Sen vui,{" "}
               <span className="text-secondary-dark dark:text-secondary-light">
-                đến ZOZO thôi!
+                đến CSO thôi!
               </span>
             </motion.h1>
 
@@ -42,7 +42,7 @@ export default function IntroCard() {
                 <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
                   Tại{" "}
                   <span className="font-semibold text-primary-dark dark:text-primary-light">
-                    ZOZO
+                    CSO
                   </span>
                   , chúng tôi cung cấp dịch vụ chăm sóc thú cưng chuyên nghiệp
                   với:
@@ -93,8 +93,8 @@ export default function IntroCard() {
               >
                 <div className="relative overflow-hidden rounded-full shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] dark:shadow-[0_25px_50px_-12px_rgba(255,255,255,0.1)]">
                   <Image
-                    src="/images/ui/dog_showering.webp"
-                    alt="Chó đang được tắm rửa tại ZOZO"
+                    src="/images/ui/Dog-shower.png"
+                    alt="Chó đang được tắm rửa tại CSO"
                     width={600}
                     height={600}
                     className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700 ease-out"

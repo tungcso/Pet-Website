@@ -32,8 +32,8 @@ export default function HeroCard() {
         className="z-20"
       >
         <Image
-          src="/images/icons/ZOZO-cat.png"
-          alt="zozo cat"
+          src="/images/icons/CSO.png?v=20260525"
+          alt="CSO dog"
           width={900}
           height={900}
           className="mx-auto z-20 hover:scale-105 transition-transform "

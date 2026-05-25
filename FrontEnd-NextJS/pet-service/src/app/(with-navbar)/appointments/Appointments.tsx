@@ -24,6 +24,7 @@ import {
   Weight,
   FileText,
   CheckCircle2,
+  Sparkles,
 } from "lucide-react";
 
 interface IFo {
@@ -119,6 +120,8 @@ export default function Appointments({ service }: { service: string | null }) {
     "17:30",
   ];
 
+  const availableTimeSlots = isDayMode ? timeSlots : (daySlots ?? []);
+
   const maxDate = useMemo(() => {
     const d = new Date();
     d.setDate(d.getDate() + 30);
@@ -141,7 +144,7 @@ export default function Appointments({ service }: { service: string | null }) {
     const w = value.petWeight ?? 0;
     if (w >= 100) return "liên hệ";
     const rule = data.rules.find(
-      (r) => w >= Number(r.minWeight) && w < Number(r.maxWeight)
+      (r) => w >= Number(r.minWeight) && w < Number(r.maxWeight),
     );
     const base = rule?.price ?? 0;
     if (typeof base === "string") return base;
@@ -152,8 +155,13 @@ export default function Appointments({ service }: { service: string | null }) {
     setLoading(true);
     if (!!!service) {
       toast.error(
-        "Có lỗi xảy ra hoặc bạn chưa chọn dịch vụ, vui lòng thử lại sau ít phút"
+        "Có lỗi xảy ra hoặc bạn chưa chọn dịch vụ, vui lòng thử lại sau ít phút",
       );
+      return;
+    }
+    if (!selectedTime) {
+      toast.error("Vui lòng chọn giờ trước khi xác nhận");
+      setLoading(false);
       return;
     }
     const res = await getPrice(service!, value.petWeight);
@@ -178,10 +186,10 @@ export default function Appointments({ service }: { service: string | null }) {
         ? toLocalDateString(selectedRangeDate.from)
         : undefined
       : selectedDate
-      ? toLocalDateString(selectedDate)
-      : undefined;
+        ? toLocalDateString(selectedDate)
+        : undefined;
 
-    const duration = isDayMode ? 1440 * datePicked : data?.duration ?? 0;
+    const duration = isDayMode ? 1440 * datePicked : (data?.duration ?? 0);
 
     const endTime = isDayMode
       ? minutesToTimeString(toMinutes(selectedTime) + 30)
@@ -262,6 +270,10 @@ export default function Appointments({ service }: { service: string | null }) {
           <form
             onSubmit={(e) => {
               e.preventDefault();
+              if (!selectedTime) {
+                toast.error("Vui lòng chọn giờ trước khi tiếp tục");
+                return;
+              }
               open({ type: "confirm-modal" });
             }}
             className="space-y-6"
@@ -404,25 +416,50 @@ export default function Appointments({ service }: { service: string | null }) {
                   </span>
                 </div>
               ) : (
-                <select
-                  id="time"
-                  disabled={loading || !service}
-                  required
-                  value={selectedTime}
-                  onChange={(e) => setSelectedTime(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-lg"
-                >
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between gap-3 flex-wrap">
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      Chọn 1 khung giờ phù hợp. Giờ đã chọn sẽ được tô nổi bật.
+                    </p>
+                    {selectedTime ? (
+                      <div className="inline-flex items-center gap-2 rounded-full bg-primary-light/15 dark:bg-primary-dark/20 px-3 py-1 text-sm font-semibold text-primary-dark dark:text-primary-light">
+                        <Sparkles className="size-4" />
+                        Đã chọn: {selectedTime}
+                      </div>
+                    ) : null}
+                  </div>
+
                   {!isDayMode && selectedDate && daySlots?.length === 0 ? (
-                    <option value="">Hết chỗ</option>
+                    <div className="rounded-2xl border border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/60 px-4 py-6 text-center text-sm text-gray-600 dark:text-gray-300">
+                      Hết chỗ cho ngày này, vui lòng chọn ngày khác.
+                    </div>
                   ) : (
-                    <option value="">Chọn giờ </option>
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-3">
+                      {availableTimeSlots.map((time) => {
+                        const isActive = selectedTime === time;
+                        return (
+                          <button
+                            key={time}
+                            type="button"
+                            disabled={loading || !service}
+                            onClick={() => setSelectedTime(time)}
+                            className={[
+                              "rounded-2xl border px-3 py-3 text-sm font-semibold transition-all duration-200 shadow-sm",
+                              isActive
+                                ? "border-primary-dark bg-primary-dark text-white shadow-lg scale-[1.02]"
+                                : "border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 hover:border-primary-dark hover:text-primary-dark dark:hover:text-primary-light hover:shadow-md",
+                              loading || !service
+                                ? "cursor-not-allowed opacity-60"
+                                : "cursor-pointer",
+                            ].join(" ")}
+                          >
+                            {time}
+                          </button>
+                        );
+                      })}
+                    </div>
                   )}
-                  {(isDayMode ? timeSlots : daySlots ?? []).map((t) => (
-                    <option key={t} value={t}>
-                      {t}
-                    </option>
-                  ))}
-                </select>
+                </div>
               )}
             </div>
 

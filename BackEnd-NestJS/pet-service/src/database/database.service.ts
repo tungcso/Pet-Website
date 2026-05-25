@@ -4,6 +4,8 @@ import { Model, Types } from 'mongoose';
 import { Permission } from 'src/permissions/schemas/permission.schema';
 import {
   ADMIN_ROLE,
+  INIT_PRICE_RULES,
+  INIT_SERVICES,
   INIT_PERMISSIONS,
   INIT_ROLES,
   MANAGER_ROLE,
@@ -13,6 +15,8 @@ import { ConfigService } from '@nestjs/config';
 import { User } from 'src/users/schemas/user.schema';
 import { Role } from 'src/roles/schemas/role.schema';
 import { UsersService } from 'src/users/users.service';
+import { Service } from 'src/services/schemas/service.schema';
+import { PriceRule } from 'src/price-rule/schemas/price-rule.schema';
 
 @Injectable()
 export class DatabaseService implements OnModuleInit {
@@ -22,16 +26,26 @@ export class DatabaseService implements OnModuleInit {
     @InjectModel(Permission.name) private permissionModel: Model<Permission>,
     @InjectModel(User.name) private userModel: Model<User>,
     @InjectModel(Role.name) private roleModel: Model<Role>,
+    @InjectModel(Service.name) private serviceModel: Model<Service>,
+    @InjectModel(PriceRule.name) private priceRuleModel: Model<PriceRule>,
   ) {}
 
   async onModuleInit() {
     const isInit = this.configService.get<boolean>('SHOULD_INIT');
     if (!Boolean(isInit)) return;
 
-    const [countUser, countPermission, countRole] = await Promise.all([
+    const [
+      countUser,
+      countPermission,
+      countRole,
+      countService,
+      countPriceRule,
+    ] = await Promise.all([
       this.userModel.countDocuments({}),
       this.permissionModel.countDocuments({}),
       this.roleModel.countDocuments({}),
+      this.serviceModel.countDocuments({}),
+      this.priceRuleModel.countDocuments({}),
     ]);
 
     // 1) Init Permissions
@@ -81,8 +95,8 @@ export class DatabaseService implements OnModuleInit {
           role: userRole?._id,
         },
         {
-          name: 'duong',
-          email: 'duong@gmail.com',
+          name: 'Lương Thanh Tùng',
+          email: 'luongtung@gmail.com',
           password: this.userService.getHash(
             this.configService.getOrThrow<string>('INIT_PASSWORD'),
           ),
@@ -94,7 +108,32 @@ export class DatabaseService implements OnModuleInit {
       ]);
     }
 
-    // 4) Log
+    // 4) Init Services
+    if (countService === 0) {
+      const adminUser = await this.userModel
+        .findOne({ email: 'admin@gmail.com' })
+        .select('_id email')
+        .lean();
+
+      await this.serviceModel.insertMany(
+        INIT_SERVICES.map((service) => ({
+          ...service,
+          createdBy: adminUser
+            ? {
+                _id: adminUser._id,
+                email: adminUser.email,
+              }
+            : undefined,
+        })),
+      );
+    }
+
+    // 5) Init Price Rules
+    if (countPriceRule === 0) {
+      await this.priceRuleModel.insertMany(INIT_PRICE_RULES);
+    }
+
+    // 6) Log
     const [afterUsers, afterPerms, afterRoles] = await Promise.all([
       this.userModel.countDocuments({}),
       this.permissionModel.countDocuments({}),

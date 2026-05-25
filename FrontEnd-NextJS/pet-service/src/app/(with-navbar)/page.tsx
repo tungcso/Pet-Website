@@ -10,7 +10,7 @@ import {
   Star,
   ChevronDown,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import BenefitCard from "@/components/ui/BenefitCard";
 import ServiceCard from "@/components/ui/ServiceCard";
@@ -37,9 +37,12 @@ export default function Home() {
   } = useServices({ current: 1, pageSize: 6 });
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
-  if (isError) {
-    handleError(error);
-  }
+  useEffect(() => {
+    if (isError) {
+      handleError(error);
+    }
+  }, [isError, error]);
+
   const iconOf = (t: ServiceType) => {
     switch (t) {
       case ServiceType.BATH:
@@ -102,7 +105,7 @@ export default function Home() {
             <BenefitCard
               icon={<Sparkles className="size-6" />}
               title="Chất lượng cao"
-              desc="Sản phẩm tắm & ủ dưỡng chọn lọc, phù hợp nhiều loại lông/da."
+              desc="Sản phẩm tắm & ủ dưỡng chọn lọc, phù hợp nhiều loại lông/da, các loại chó mèo."
             />
           </motion.div>
         </div>
@@ -111,12 +114,37 @@ export default function Home() {
       {/* FEATURED SERVICES GRID */}
       <section className="max-w-6xl mx-auto px-4 ">
         <h3 className="text-2xl md:text-3xl font-bold mb-6">Dịch vụ nổi bật</h3>
-        <div className="grid sm:grid-cols-2  lg:grid-cols-3 gap-6">
-          {!(!isLoading && listServices && listServices.result) ? (
+        <div className="grid sm:grid-cols-2  lg:grid-cols-4 gap-4">
+          {isLoading ? (
             <div className="col-span-3">
               {" "}
               <LoadingScreen />{" "}
             </div>
+          ) : !listServices?.result?.length ? (
+            FALLBACK_SERVICE_INTROS.map((service, index) => (
+              <motion.article
+                initial={{ y: 60, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.08 }}
+                key={service.title}
+                className="rounded-3xl border border-black/10 dark:border-white/10 bg-white/70 dark:bg-white/5 backdrop-blur p-5"
+              >
+                <div className="inline-flex items-center gap-2 rounded-full bg-black/80 text-white px-3 py-1 text-xs">
+                  {service.icon}
+                  <span>{service.badge}</span>
+                </div>
+                <h4 className="mt-3 text-lg font-semibold">{service.title}</h4>
+                <p className="mt-2 text-sm text-black/70 dark:text-white/70">
+                  {service.desc}
+                </p>
+                <ul className="mt-3 space-y-1 text-sm text-black/80 dark:text-white/80">
+                  {service.highlights.map((item) => (
+                    <li key={item}>• {item}</li>
+                  ))}
+                </ul>
+              </motion.article>
+            ))
           ) : (
             (
               [
@@ -128,7 +156,7 @@ export default function Home() {
             ).map((type: ServiceType) => {
               const services = listServices.result;
               const service = services.find(
-                (item: IService) => item.type == type
+                (item: IService) => item.type == type,
               );
               if (!service) return null;
               return (
@@ -159,9 +187,9 @@ export default function Home() {
           )}
           <Link
             href={"/services"}
-            className="block text-center md:col-start-2 hover:underline"
+            className="col-span-full flex justify-center items-center mt-2 hover:underline"
           >
-            Xem tất cả
+            <span className="text-center">Xem tất cả</span>
           </Link>
         </div>
       </section>
@@ -286,5 +314,52 @@ const FAQS = [
   {
     q: "Thanh toán như thế nào?",
     a: "Bạn có thể thanh toán tại quầy (tiền mặt/QR) hoặc thanh toán online sau khi đặt lịch.",
+  },
+];
+
+const FALLBACK_SERVICE_INTROS = [
+  {
+    title: "Tắm & vệ sinh cho chó mèo",
+    badge: "BATH",
+    icon: <Bath className="size-4" />,
+    desc: "Làm sạch sâu, khử mùi và dưỡng lông để bé luôn thơm tho, dễ chịu.",
+    highlights: [
+      "Tắm bằng sản phẩm dịu nhẹ theo loại da",
+      "Sấy tạo form lông gọn gàng, chu đáo",
+      "Vệ sinh tai, móng và vùng nhạy cảm",
+    ],
+  },
+  {
+    title: "Cắt tỉa & chăm sóc lông",
+    badge: "GROOMING",
+    icon: <Scissors className="size-4" />,
+    desc: "Tạo kiểu theo giống hoặc theo yêu cầu để bé gọn gàng và thoải mái vận động.",
+    highlights: [
+      "Tỉa mặt, chân, bụng theo tỷ lệ phù hợp",
+      "Gỡ rối và xử lý cẩn thận lông vón cục",
+      "Tư vấn lịch chăm sóc và khám định kỳ",
+    ],
+  },
+  {
+    title: "Khách sạn thú cưng",
+    badge: "HOTEL",
+    icon: <Star className="size-4" />,
+    desc: "Lưu trú an toàn, theo dõi trạng thái bé hằng ngày khi bạn bận đi công tác.",
+    highlights: [
+      "Khu ở sạch, thoáng và tách khu phù hợp",
+      "Cập nhật ăn uống, vận động mỗi ngày",
+      "Hỗ trợ chăm sóc theo thói quen của bé",
+    ],
+  },
+  {
+    title: "Dịch vụ bổ sung",
+    badge: "OTHER",
+    icon: <Sparkles className="size-4" />,
+    desc: "Các gói chăm sóc chuyên sâu cho từng nhu cầu riêng của thú cưng.",
+    highlights: [
+      "Khử mùi, dưỡng da lông chuyên biệt",
+      "Xử lý ve rận và phòng ngừa tái phát",
+      "Combo chăm sóc tiết kiệm theo tháng",
+    ],
   },
 ];

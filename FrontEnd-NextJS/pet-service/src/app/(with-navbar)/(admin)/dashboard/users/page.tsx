@@ -60,7 +60,7 @@ export default function UsersUI() {
   const [file, setFile] = useState<File>();
   const [draft, setDraft, clearDraft] = useSession<UserDraft>(
     "user_form",
-    DEFAULT_DRAFT
+    DEFAULT_DRAFT,
   );
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
@@ -105,7 +105,7 @@ export default function UsersUI() {
     };
     try {
       if (file) {
-        const res = await uploadToCloud("/images/users", file);
+        const res = await uploadToCloud("images/users", file);
 
         if (!res) {
           return;
@@ -284,7 +284,7 @@ export default function UsersUI() {
                   onClick={() => {
                     const qs = encodeURIComponent(JSON.stringify(draft.role));
                     router.push(
-                      `/dashboard/roles?role=${qs}&next=/dashboard/users`
+                      `/dashboard/roles?role=${qs}&next=/dashboard/users`,
                     );
                   }}
                   className="mt-2 px-3 py-1 bg-primary-light/80 rounded text-white text-sm"

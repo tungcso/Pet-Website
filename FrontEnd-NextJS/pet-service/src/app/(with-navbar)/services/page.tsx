@@ -40,8 +40,7 @@ import {
   CarouselNext,
 } from "@/components/ui/carousel";
 
-const src2 = "/images/ui/bang_gia_tam.jpg";
-const src1 = "/images/ui/bang_gia_khach_san.jpg";
+// carousel images removed per request
 
 export default function ServicesUI() {
   const { modal, open, close, isOpen } = useModal();
@@ -76,10 +75,10 @@ export default function ServicesUI() {
 
   useEffect(() => {
     const selectedPets = (Object.keys(petFilter) as PetType[]).filter(
-      (k) => !!petFilter[k]
+      (k) => !!petFilter[k],
     );
     const selectedTypes = (Object.keys(typeFilter) as ServiceType[]).filter(
-      (k) => !!typeFilter[k]
+      (k) => !!typeFilter[k],
     );
 
     setParams((p: ServiceParams) => {
@@ -257,7 +256,7 @@ export default function ServicesUI() {
                               >
                                 {can(
                                   permissions,
-                                  PERMISSIONS.SERVICES_DELETE
+                                  PERMISSIONS.SERVICES_DELETE,
                                 ) && (
                                   <div className=" flex justify-center space-x-2 items-center">
                                     <FaTrashCan className=" text-error cursor-pointer" />
@@ -276,7 +275,7 @@ export default function ServicesUI() {
                               >
                                 {can(
                                   permissions,
-                                  PERMISSIONS.SERVICES_PATCH
+                                  PERMISSIONS.SERVICES_PATCH,
                                 ) && (
                                   <div className=" flex justify-center space-x-2 items-center">
                                     <FaPencilAlt />
@@ -301,54 +300,7 @@ export default function ServicesUI() {
           )}
         </div>
 
-        <Carousel className="">
-          <CarouselContent className="w-60">
-            <CarouselItem className="">
-              {" "}
-              <div
-                className="relative overflow-hidden rounded-2xl h-40 cursor-pointer group"
-                onClick={() => open({ type: "image", src: src2 })}
-              >
-                <Image
-                  src={src2}
-                  alt="Dịch vụ tắm gội"
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  priority
-                />
-                <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
-                <div className="absolute bottom-2 left-2 text-white drop-shadow-lg">
-                  <h3 className="text-base font-bold mb-1">Tắm & Tỉa lông</h3>
-                  <p className="text-xs opacity-90">
-                    Sạch thơm, khô ráo, đẹp lông
-                  </p>
-                </div>
-              </div>
-            </CarouselItem>
-            <CarouselItem>
-              {" "}
-              <div
-                className="relative overflow-hidden rounded-2xl h-40 cursor-pointer group"
-                onClick={() => open({ type: "image", src: src1 })}
-              >
-                <Image
-                  src={src1}
-                  alt="Dịch vụ chăm sóc thú cưng"
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  priority
-                />
-                <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
-                <div className="absolute bottom-2 left-2 text-white drop-shadow-lg">
-                  <h2 className="text-lg font-bold mb-1">Khách sạn thú cưng</h2>
-                  <p className="text-xs opacity-90">
-                    Theo dõi 24/7, chăm sóc tận tâm
-                  </p>
-                </div>
-              </div>
-            </CarouselItem>
-          </CarouselContent>
-        </Carousel>
+        {/* Carousel removed */}
 
         {/* Modal tạo dịch vụ */}
         <AnimatePresence>

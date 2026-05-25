@@ -27,7 +27,7 @@ export default function NavBar() {
     rounded-3xl
     dark:ring-background-light
     ring-background-dark       
-    `
+    `,
   );
   // Algorithm to check scroll y
   useEffect(() => {
@@ -139,7 +139,7 @@ export default function NavBar() {
 
           {/* calendar icon */}
           <Link
-            href="/appointments "
+            href="/appointments"
             className={[
               iconClass.current,
               "p-2 hidden hover:scale-110 transition-none",

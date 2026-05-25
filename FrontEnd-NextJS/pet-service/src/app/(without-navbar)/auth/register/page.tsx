@@ -79,8 +79,8 @@ export default function RegisterPage() {
         className="w-auto h-auto"
       >
         <Image
-          src="/images/icons/ZOZO-cat.png"
-          alt="ZOZO"
+          src="/images/icons/CSO.png"
+          alt="CSO"
           width={296}
           height={296}
           className="mb-3 animate-pulse"

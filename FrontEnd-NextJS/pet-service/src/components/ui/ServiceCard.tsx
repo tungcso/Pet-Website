@@ -29,7 +29,7 @@ export default function ServiceCard({
           {icon} <span>Nổi bật</span>
         </div>
       </div>
-      <div className="p-4">
+      <div className="p-3">
         <div className="flex items-start justify-between gap-2">
           <h5 className="font-semibold truncate hover:overflow-visible ">
             {title}
