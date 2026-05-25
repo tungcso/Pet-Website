@@ -28,13 +28,22 @@ export class GoogleAuthService {
     try {
       const ticket = await this.client.verifyIdToken({
         idToken: token,
-        audience: this.audienceIds,
       });
 
       const payload = ticket.getPayload();
       if (!payload?.email || !payload?.name) {
         throw new BadRequestException(
           'Invalid Google token: missing email or name',
+        );
+      }
+
+      if (
+        this.audienceIds.length &&
+        payload.aud &&
+        !this.audienceIds.includes(payload.aud)
+      ) {
+        throw new BadRequestException(
+          `Invalid Google token audience: ${payload.aud}`,
         );
       }
 
