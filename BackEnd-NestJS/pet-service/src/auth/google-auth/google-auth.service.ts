@@ -17,26 +17,29 @@ export class GoogleAuthService {
   }
 
   async verifyToken(token: string) {
-    // try {
-    const ticket = await this.client.verifyIdToken({
-      idToken: token,
-      audience: this.configService.get<string>('GOOGLE_CLIENT_ID'),
-    });
+    try {
+      const ticket = await this.client.verifyIdToken({
+        idToken: token,
+        audience: this.configService.get<string>('GOOGLE_CLIENT_ID'),
+      });
 
-    const payload = ticket.getPayload();
-    if (!payload?.email || !payload?.name) {
-      throw new BadRequestException(
-        'Invalid Google token: missing email or name',
+      const payload = ticket.getPayload();
+      if (!payload?.email || !payload?.name) {
+        throw new BadRequestException(
+          'Invalid Google token: missing email or name',
+        );
+      }
+
+      return {
+        email: payload.email,
+        name: payload.name,
+        picture: payload.picture,
+      };
+    } catch (error: any) {
+      // Log error server-side if needed
+      throw new BadGatewayException(
+        `Failed to verify Google token: ${error?.message ?? 'unknown'}`,
       );
     }
-
-    return {
-      email: payload.email,
-      name: payload.name,
-      picture: payload.picture,
-    };
-    // } catch (error) {
-    //   throw new BadGatewayException('Lỗi verify người dùng');
-    // }
   }
 }
