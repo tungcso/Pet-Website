@@ -44,6 +44,14 @@ export class AuthService {
     private googleAuthService: GoogleAuthService,
   ) {}
 
+  private getPrimaryFrontendUrl() {
+    const feBase = this.configService.getOrThrow<string>('FE_BASE_URL');
+    return feBase
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)[0];
+  }
+
   googleLogin = async (id_token: string, res: Response) => {
     const userInfo = await this.verifyGoogle(id_token);
 
@@ -361,7 +369,8 @@ export class AuthService {
 
   async sendMagicLink(id: string, name: string, email: string) {
     const token = await this.createMagicToken(id);
-    const url = `${this.configService.getOrThrow('FE_BASE_URL')}/auth/verify#${token}`;
+    const baseUrl = this.getPrimaryFrontendUrl();
+    const url = `${baseUrl}/auth/verify#${token}`;
     const payload = {
       url,
       name,
@@ -406,7 +415,8 @@ export class AuthService {
       throw new BadRequestException('Email không tồn tại');
     }
     const token = await this.createMagicToken(user._id.toString());
-    const url = `${this.configService.getOrThrow('FE_BASE_URL')}/auth/forget-password#${token}`;
+    const baseUrl = this.getPrimaryFrontendUrl();
+    const url = `${baseUrl}/auth/forget-password#${token}`;
     const payload = {
       url,
       name: user.name,
