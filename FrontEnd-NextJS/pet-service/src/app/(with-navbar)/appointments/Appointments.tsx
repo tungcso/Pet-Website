@@ -227,15 +227,22 @@ export default function Appointments({ service }: { service: string | null }) {
     const _id = await postAppointments(payload);
     if (_id) {
       toast.success("Đặt lịch thành công");
-      const mail = await sendNotifyEmail(_id);
-      if (!mail) {
-        toast.error("Lỗi không gửi mail được");
-        setLoading(false);
-      }
+
+      // send notification email in background so UI is snappy
+      sendNotifyEmail(_id)
+        .then(() => {
+          // optionally show success for email or do nothing
+        })
+        .catch(() => {
+          toast.error("Lỗi không gửi mail được");
+        });
+
+      setLoading(false);
       router.replace("/appointments/done");
-    } else {
-      toast.error("Đang có lỗi hiện chưa tạo được");
+      return;
     }
+
+    toast.error("Đang có lỗi hiện chưa tạo được");
     setLoading(false);
   };
 
