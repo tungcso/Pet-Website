@@ -28,10 +28,24 @@ async function bootstrap() {
   const allowedOrigins = feBase
     .split(',')
     .map((s) => s.trim())
-    .filter(Boolean);
+    .filter(Boolean)
+    .map((origin) => origin.replace(/\/$/, ''));
 
   app.enableCors({
-    origin: allowedOrigins.length ? allowedOrigins : true,
+    origin: (origin, callback) => {
+      // Allow requests without Origin header (e.g. server-to-server/health checks)
+      if (!origin) return callback(null, true);
+
+      const normalizedOrigin = origin.replace(/\/$/, '');
+      if (!allowedOrigins.length || allowedOrigins.includes(normalizedOrigin)) {
+        return callback(null, true);
+      }
+
+      return callback(
+        new Error(`Origin not allowed by CORS: ${origin}`),
+        false,
+      );
+    },
     methods: 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS',
     preflightContinue: false,
     credentials: true,

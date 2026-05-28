@@ -21,6 +21,11 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { PriceRuleModule } from './price-rule/price-rule.module';
 import { HealthModule } from './health/health.module';
 
+const envFilePath =
+  process.env.NODE_ENV === 'production'
+    ? ['.env.production', '.env']
+    : ['.env.development', '.env'];
+
 @Module({
   imports: [
     ThrottlerModule.forRoot({
@@ -40,7 +45,7 @@ import { HealthModule } from './health/health.module';
     }),
     AuthModule,
     ConfigModule.forRoot({
-      envFilePath: ['.env.development', '.env.production'],
+      envFilePath,
       isGlobal: true,
     }),
     UsersModule,
