@@ -1,0 +1,15 @@
+version: 2
+updates:
+  # Quét lỗ hổng cho mã nguồn Frontend (Next.js)
+  - package-ecosystem: "npm"
+    directory: "/FrontEnd-NextJS/pet-service"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+
+  # Quét lỗ hổng cho mã nguồn Backend (NestJS)
+  - package-ecosystem: "npm"
+    directory: "/BackEnd-NestJS/pet-service"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
