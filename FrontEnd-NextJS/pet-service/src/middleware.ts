@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
 
   // 1. LẤY IP CỦA NGƯỜI TRUY CẬP
   // Khi host trên Vercel, IP thực của người dùng sẽ nằm ở header 'x-forwarded-for'
-  const ip = request.headers.get('x-forwarded-for') || request.ip || 'Unknown IP';
+  const ip = request.headers.get('x-forwarded-for') || 'Unknown IP';
   
   // 2. LẤY ĐƯỜNG DẪN (URL) HỌ ĐANG TRUY CẬP
   const path = request.nextUrl.pathname;
