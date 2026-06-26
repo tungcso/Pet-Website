@@ -4,14 +4,23 @@ import { Logger } from 'next-axiom';
 
 // DANH SÁCH ĐEN (WAF RULES) - Các từ khóa độc hại cần chặn
 const WAF_RULES = [
-  '/wp-admin', 
-  '/wp-login', 
-  '/.env', 
-  '/phpmyadmin', 
-  'select+', 
-  'union+select', 
-  'or+1=1',
-  'hack'
+  /\.env/i,
+  /wp-admin/i,
+  /phpmyadmin/i,
+
+  /union\s+select/i,
+  /or\s+1\s*=\s*1/i,
+  /information_schema/i,
+
+  /<script/i,
+  /javascript:/i,
+
+  /\.\.\//,
+
+  /wget/i,
+  /curl/i,
+
+  /hack/i,
 ];
 
 export async function middleware(request: NextRequest) {
@@ -19,10 +28,11 @@ export async function middleware(request: NextRequest) {
   const ip = request.headers.get('x-forwarded-for') || 'Unknown IP';
   const path = request.nextUrl.pathname.toLowerCase();
   const searchParams = request.nextUrl.search.toLowerCase();
-  const fullUrl = path + searchParams;
+  // Decode URL để bắt các chuỗi mã hóa như %20 hoặc dấu cộng (+) cho khoảng trắng
+  const fullUrl = decodeURIComponent((path + searchParams).replace(/\+/g, '%20'));
 
   // 1. TÍNH NĂNG WAF (FIREWALL): Kiểm tra xem người dùng có đang cố tấn công không
-  const isMalicious = WAF_RULES.some((rule) => fullUrl.includes(rule));
+  const isMalicious = WAF_RULES.some((rule) => rule.test(fullUrl));
 
   if (isMalicious) {
     // Ghi log cảnh báo ĐỎ về Axiom
